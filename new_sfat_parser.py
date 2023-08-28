@@ -35,7 +35,7 @@ def invoice_resume(path_to_doc):
         
         val1 = int(n_of_invoice_entries) == int(invoice_len)
         val2 = float(total_credit_declared) ==  float(sum(net_total_list))
-        val3 = float(sum(total_credit_calculated))== float((sum(net_total_list))+(round(sum(taxes_total_list),2)))
+        val3 = round(float(sum(total_credit_calculated)),2)== round(float((sum(net_total_list))+(round(sum(taxes_total_list),2))),2)
         
         if val1 and  val2 and val3 == True:
             validation = 1
@@ -46,10 +46,10 @@ def invoice_resume(path_to_doc):
             "number_of_invoice_dec":n_of_invoice_entries,
             "number_of_invoice_calc":invoice_len,
             "total_invoices_declared":total_credit_declared,
-            "total_invoices_calculated":sum(net_total_list),
+            "total_invoices_calculated":round(sum(net_total_list),2),
             "total_taxes_calculated":round(sum(taxes_total_list),2),
-            "total_dec_invoices_plus_tax":sum(total_credit_calculated),
-            "total_calc_invoices_plus_tax":(sum(net_total_list))+(round(sum(taxes_total_list),2)),
+            "total_dec_invoices_plus_tax":round(sum(total_credit_calculated),2),
+            "total_calc_invoices_plus_tax":round((sum(net_total_list))+(round(sum(taxes_total_list),2)),2),
             "validation": validation
         }
         return result
@@ -78,7 +78,7 @@ def receipt_resume(path_to_doc):
         
         val1 = int(n_of_receipt_entries) == int(receipts_len)
         val2 = round(float(total_credit_declared),0) ==  round(float(sum(net_total_list)),0)
-        val3 = float(sum(total_credit_calculated))== float((sum(net_total_list))+(round(sum(taxes_total_list),2)))
+        val3 = round(float(sum(total_credit_calculated)),2)== round(float((sum(net_total_list))+(round(sum(taxes_total_list),2))),2)
         
         if val1 and  val2 and val3 == True:
             validation = 1
@@ -89,7 +89,7 @@ def receipt_resume(path_to_doc):
             "number_of_receipt_dec":n_of_receipt_entries,
             "number_of_receipt_calc":receipts_len,
             "total_receipts_declared":total_credit_declared,
-            "total_receipts_calculated":sum(net_total_list),
+            "total_receipts_calculated":round(sum(net_total_list),2),
             "total_taxes_calculated":round(sum(taxes_total_list),2),
             "total_dec_receipt_plus_tax":round(sum(total_credit_calculated),2),
             "total_calc_receipt_plus_tax":round((sum(net_total_list))+(sum(taxes_total_list)),2),
@@ -147,6 +147,6 @@ def working_documents_resume(path_to_doc):
 
 
 if __name__ == "__main__":
-    noe_index_calculation('',"SalesInvoices")
+    receipt_resume('/Users/fredericoandrade/Documents/IX/SCB/299/SAF-T_07_2023.xml')
     #my_test = receipt_resume('/Users/fredericoandrade/Documents/IX/SCB/287/SAF-T_7_2023.xml')
     #print(my_test)
