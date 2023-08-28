@@ -19,7 +19,8 @@ if uploaded_doc is not None:
                  'Working Documents'])
     
     if selected_option == 'Invoices':
-        invoice_resume = invoice_resume(uploaded_doc)
+        with st.spinner('Loading Information'):
+            invoice_resume = invoice_resume(uploaded_doc)
         
         if not invoice_resume:
             st.warning('This SAF-T does not contain any invoice.')
@@ -52,7 +53,9 @@ if uploaded_doc is not None:
             
         
     elif selected_option == 'Receipts':
-        receipt_resume = receipt_resume(uploaded_doc)
+        with st.spinner('Loading Information'):
+            receipt_resume = receipt_resume(uploaded_doc)
+        
         
         if not receipt_resume:
             st.warning('This SAF-T does not contain any Receipt.')
@@ -83,7 +86,8 @@ if uploaded_doc is not None:
         
             
     elif selected_option == 'Working Documents':
-        working_documents_resume = working_documents_resume(uploaded_doc)
+        with st.spinner('Loading Information'):
+            working_documents_resume = working_documents_resume(uploaded_doc)
         
         if not working_documents_resume:
             st.warning('This SAF-T does not contain any WorkingDocument.')
