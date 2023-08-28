@@ -101,7 +101,7 @@ def receipt_resume(path_to_doc):
 
 def working_documents_resume(path_to_doc):
     doc = minidom.parse(path_to_doc)
-    entry_index = noe_index_calculation(doc,"WorkingDocumets")
+    entry_index = noe_index_calculation(doc,"WorkingDocuments")
     working_documents = doc.getElementsByTagName("WorkDocument")
     if isinstance(entry_index, (int)):
         n_of_wd_entries = doc.getElementsByTagName("NumberOfEntries")[entry_index].childNodes[0].data

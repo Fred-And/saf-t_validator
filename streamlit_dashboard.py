@@ -54,7 +54,7 @@ if uploaded_doc is not None:
     elif selected_option == 'Receipts':
         receipt_resume = receipt_resume(uploaded_doc)
         
-        if not invoice_resume:
+        if not receipt_resume:
             st.warning('This SAF-T does not contain any Receipt.')
         
         else:
