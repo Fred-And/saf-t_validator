@@ -17,25 +17,40 @@ def invoice_resume(path_to_doc):
     entry_index = noe_index_calculation(doc,"SalesInvoices")
     invoices = doc.getElementsByTagName("Invoice")
     if  isinstance(entry_index, (int)):
+        
         n_of_invoice_entries = doc.getElementsByTagName("NumberOfEntries")[entry_index].childNodes[0].data
         total_credit_declared = doc.getElementsByTagName("TotalCredit")[entry_index].childNodes[0].data
         invoice_len = invoices.length
+        
+        #Increase the ammount
         total_credit_calculated = []
         net_total_list = []
         taxes_total_list = []
         
+        #Decrease the ammount
+        credit_notes_net = []
+        credit_notes_gross = []
+        credit_notes_taxes = []
+        
         
         for i in invoices:
+            invoice_type = i.getElementsByTagName('InvoiceType')[0].childNodes[0].data
             gross_total = i.getElementsByTagName('GrossTotal')[0].childNodes[0].data
             net_total =  i.getElementsByTagName('NetTotal')[0].childNodes[0].data
             tax_payable = i.getElementsByTagName('TaxPayable')[0].childNodes[0].data
-            total_credit_calculated.append(float(gross_total))
-            net_total_list.append(float(net_total))
-            taxes_total_list.append(float(tax_payable))
+            if invoice_type == 'NC':
+                credit_notes_net.append(float(net_total))
+                credit_notes_gross.append(float(gross_total))
+                credit_notes_taxes.append(float(tax_payable))
+            else:
+                total_credit_calculated.append(float(gross_total))
+                net_total_list.append(float(net_total))
+                taxes_total_list.append(float(tax_payable))
+
         
         val1 = int(n_of_invoice_entries) == int(invoice_len)
-        val2 = float(total_credit_declared) ==  float(sum(net_total_list))
-        val3 = round(float(sum(total_credit_calculated)),2)== round(float((sum(net_total_list))+(round(sum(taxes_total_list),2))),2)
+        val2 = float(total_credit_declared) == round(sum(net_total_list),2)
+        val3 = round(sum(total_credit_calculated),2) == round(sum(net_total_list)+sum(taxes_total_list),2)
         
         if val1 and  val2 and val3 == True:
             validation = 1
@@ -112,16 +127,18 @@ def working_documents_resume(path_to_doc):
         taxes_total_list = []
         
         for i in working_documents:
+            status = i.getElementsByTagName('WorkStatus')[0].childNodes[0].data
             gross_total = i.getElementsByTagName('GrossTotal')[0].childNodes[0].data
             net_total =  i.getElementsByTagName('NetTotal')[0].childNodes[0].data
             tax_payable = i.getElementsByTagName('TaxPayable')[0].childNodes[0].data
-            total_credit_calculated.append(float(gross_total))
-            net_total_list.append(float(net_total))
-            taxes_total_list.append(float(tax_payable))
+            if status != "A":
+                total_credit_calculated.append(float(gross_total))
+                net_total_list.append(float(net_total))
+                taxes_total_list.append(float(tax_payable))
         
         val1 = int(n_of_wd_entries) == int(wd_len)
-        val2 = round(float(total_credit_declared),0) ==  round(float(sum(net_total_list)),0)
-        val3 = float(sum(total_credit_calculated))== float((sum(net_total_list))+(round(sum(taxes_total_list),2)))
+        val2 = round(float(total_credit_declared),2) ==  round(float(sum(net_total_list)),2)
+        val3 = round(float(sum(total_credit_calculated)),2)== round(float((sum(net_total_list))+(sum(taxes_total_list))),2)
         
         if val1 and  val2 and val3 == True:
             validation = 1
@@ -132,7 +149,7 @@ def working_documents_resume(path_to_doc):
             "number_of_wd_dec":n_of_wd_entries,
             "number_of_wd_calc":wd_len,
             "total_wds_declared":total_credit_declared,
-            "total_wds_calculated":sum(net_total_list),
+            "total_wds_calculated":round(sum(net_total_list),2),
             "total_taxes_calculated":round(sum(taxes_total_list),2),
             "total_dec_wd_plus_tax":round(sum(total_credit_calculated),2),
             "total_calc_wd_plus_tax":round((sum(net_total_list))+(sum(taxes_total_list)),2),
@@ -141,12 +158,6 @@ def working_documents_resume(path_to_doc):
         return result
     else:
         return {}
-    
-    
-    
-
 
 if __name__ == "__main__":
-    receipt_resume('/Users/fredericoandrade/Documents/IX/SCB/299/SAF-T_07_2023.xml')
-    #my_test = receipt_resume('/Users/fredericoandrade/Documents/IX/SCB/287/SAF-T_7_2023.xml')
-    #print(my_test)
+    receipt_resume('SAF-T_07_2023.xml')
